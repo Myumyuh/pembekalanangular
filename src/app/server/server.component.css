@@ -1,0 +1,13 @@
+p {
+    background-color:cadetblue;
+    border: 1px solid black;
+}
+
+.textSize {
+    font-size: 20px;
+    padding: 20px;
+}
+
+.onlines {
+    color: white;
+}

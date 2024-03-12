@@ -1,0 +1,25 @@
+<button (click)="getRandomizer()" (click)="boolToggle()">Display Details</button>
+
+@if (boolswitch){
+    <p>{{getSecretString()}}</p>
+}
+
+<!-- <p *ngFor="">{{secretStuff}}</p>
+<ng-container *ngFor="let secretStuff of secretStuffs">
+<div>
+    <p *ngIf="checkBoolLength(); else morethan5">{{secretStuff}}</p>
+    <ng-template #morethan5>
+        <p [ngStyle]="{backgroundColor:blue}">{{secretStuff}}</p>
+    </ng-template>
+</div>
+</ng-container> -->
+
+
+@for (secretStuff of secretStuffs; track $index) {
+    @if ($index >= 4) {
+        <p [ngStyle]="{backgroundColor: 'blue'}" [ngClass]="{lebih5: $index >= 4}">{{$index + 1}}</p>
+    }@else {
+        <p>{{$index + 1}}</p>
+    }
+    
+}

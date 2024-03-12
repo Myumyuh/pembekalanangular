@@ -1,0 +1,5 @@
+<p>Tugas Binding</p>
+<input type="text" [(ngModel)]="username">
+<button [attr.disabled]="username ? null : true" (click)="resetFunc()">Reset</button>
+<p>Username = {{username}}</p>
+
