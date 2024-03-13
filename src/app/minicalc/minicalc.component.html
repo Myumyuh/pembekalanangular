@@ -1,0 +1,13 @@
+<h1>Calculator!</h1>
+
+<label>Var 1</label><input type="number" [(ngModel)]="var1">
+<br>
+<label>Var 2</label><input type="number" [(ngModel)]="var2">
+<br>
+<button (click)="doAddition()">+</button>
+<button (click)="doSubtraction()">-</button>
+<button (click)="doDivision()">/</button>
+<button (click)="doMultiplication()">*</button>
+
+<p>{{result}}</p>
+

@@ -9,6 +9,7 @@ import { SuccessalertComponent } from './successalert/successalert.component';
 import { FormsModule } from '@angular/forms';
 import { BindingtaskkComponent } from './bindingtaskk/bindingtaskk.component';
 import { NgtaskComponent } from './ngtask/ngtask.component';
+import { MinicalcComponent } from './minicalc/minicalc.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { NgtaskComponent } from './ngtask/ngtask.component';
     WarningalertComponent,
     SuccessalertComponent,
     BindingtaskkComponent,
-    NgtaskComponent
+    NgtaskComponent,
+    MinicalcComponent
   ],
   imports: [
     BrowserModule,
