@@ -1,0 +1,155 @@
+<div class="container" id="main-container">
+  <h1>Category API</h1>
+
+  <br>
+  <div>
+    <button type="button" class="btn btn-primary" data-toggle="collapse" (click)="onOpenModal(null, 'add')">
+      [+] Tambah Data Category
+    </button>
+  </div>
+
+  <div id="content" class="row">
+    <div class="col-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Category Initial</th>
+            <th>Category Name</th>
+            <th>Active</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cat of category; index as index">
+            <td>{{index + 1}}</td>
+            <td>{{cat.category_initial}}</td>
+            <td>{{cat.category_name}}</td>
+            <td>{{cat.is_active}}</td>
+            <td>
+              <button (click)="onOpenModal(cat, 'edit')">Edit</button>
+              <button (click)="onOpenModal(cat, 'delete')">Delete</button></td>
+          </tr>
+          <!-- @for (cat of category; track $index){
+                        <tr>
+                            <th>{{$index + 1}}</th>
+                            <th>{{cat.category_initial}}</th>
+                            <th>{{cat.category_name}}</th>
+                            <th>{{cat.is_active}}</th>
+                            <th><button>Edit</button><button>Delete</button></th>
+                        </tr>
+                    } -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Add Category-->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #addForm="ngForm" (ngSubmit)="onAddCategory(addForm)">
+          <div class="form-group">
+            <label>Category Initial</label>
+            <input ngModel type="text" class="form-control" name="category_initial">
+          </div>
+          <div class="form-group">
+            <label>Category Name</label>
+            <input ngModel type="text" class="form-control" name="category_name">
+          </div>
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" name="is_active" [ngModel]="false">
+            <label class="form-check-label">Active</label>
+          </div>
+          <div class="modal-footer">
+            <button id="addCloseModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal Edit Category-->
+<div class="modal fade" id="editCategoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Category</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #editForm="ngForm" (ngSubmit)="onEditCategory(editForm)">
+          <input ngModel="{{editCategory.id}}" hidden name="id">
+          <div class="form-group">
+            <label>Category Initial</label>
+            <input ngModel="{{editCategory.category_initial}}" type="text" class="form-control" name="category_initial">
+          </div>
+          <div class="form-group">
+            <label>Category Name</label>
+            <input ngModel="{{editCategory.category_name}}" type="text" class="form-control" name="category_name">
+          </div>
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" name="is_active" [ngModel]="editCategory.is_active">
+            <label class="form-check-label">Active</label>
+          </div>
+          <div class="modal-footer">
+            <button id="editCloseModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal Delete Category-->
+<div class="modal fade" id="deleteCategoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete Category</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #deleteForm="ngForm" (ngSubmit)="onDeleteCategory(deleteForm)">
+          <input ngModel="{{deleteCategory.id}}" hidden name="id">
+          <div class="form-group">
+            <label><b>Category Initial</b> : {{deleteCategory.category_initial}}</label>
+          </div>
+          <div class="form-group">
+            <label><b>Category Name</b>    : {{deleteCategory.category_name}}</label>
+          </div>
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" name="is_active" [ngModel]="deleteCategory.is_active" disabled>
+            <label class="form-check-label">Active</label>
+          </div>
+          <div class="modal-footer">
+            <button id="deleteCloseModal" type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            <button type="submit" class="btn btn-primary">Yes</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+

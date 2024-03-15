@@ -1,0 +1,157 @@
+<div class="container" id="main-container">
+    <h1>Variant API</h1>
+  
+    <br>
+    <div>
+      <button type="button" class="btn btn-primary" data-toggle="collapse" (click)="onOpenModal(null, 'add')">
+        [+] Tambah Data Variant
+      </button>
+    </div>
+  
+    <div id="content" class="row">
+      <div class="col-12">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Category ID</th>
+              <th>Variant Initial</th>
+              <th>Variant Name</th>
+              <th>Active</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let isivar of variant; index as index">
+              <td>{{index + 1}}</td>
+              <td>{{isivar.category_id}}</td>
+              <td>{{isivar.variant_initial}}</td>
+              <td>{{isivar.variant_name}}</td>
+              <td>{{isivar.is_active}}</td>
+              <td>
+                <button (click)="onOpenModal(isivar, 'edit')" >Edit</button>
+                <button (click)="onOpenModal(isivar, 'delete')">Delete</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+<!-- Modal Add Variant-->
+<div class="modal fade" id="addVariantModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #addForm="ngForm" (ngSubmit)="onAddVariant(addForm)">
+            <div class="form-group">
+                <label>Category ID</label>
+                <input ngModel type="number" class="form-control" name="category_id">
+              </div>  
+          <div class="form-group">
+            <label>Variant Initial</label>
+            <input ngModel type="text" class="form-control" name="variant_initial">
+          </div>
+          <div class="form-group">
+            <label>Variant Name</label>
+            <input ngModel type="text" class="form-control" name="variant_name">
+          </div>
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" name="is_active" [ngModel]="false">
+            <label class="form-check-label">Active</label>
+          </div>
+          <div class="modal-footer">
+            <button id="addVariantCloseModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal Edit Variant-->
+<div class="modal fade" id="editVariantModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Category</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #editForm="ngForm" (ngSubmit)="onUpdateVariant(editForm)">
+          <input ngModel="{{updateVariant.id}}" hidden name="id">
+          <div class="form-group">
+            <label>Category ID</label>
+            <input ngModel="{{updateVariant.category_id}}" type="text" class="form-control" name="category_id">
+          </div>
+          <div class="form-group">
+            <label>Category Initial</label>
+            <input ngModel="{{updateVariant.variant_initial}}" type="text" class="form-control" name="variant_initial">
+          </div>
+          <div class="form-group">
+            <label>Category Name</label>
+            <input ngModel="{{updateVariant.variant_name}}" type="text" class="form-control" name="variant_name">
+          </div>
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" name="is_active" [ngModel]="updateVariant.is_active">
+            <label class="form-check-label">Active</label>
+          </div>
+          <div class="modal-footer">
+            <button id="editVariantCloseModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal Delete Variant-->
+<div class="modal fade" id="deleteVariantModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete Variant</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #deleteForm="ngForm" (ngSubmit)="onDeleteVariant(deleteForm)">
+          <input ngModel="{{deleteVariant.id}}" hidden name="id">
+          <div class="form-group">
+            <label><b>Category Initial</b> : {{deleteVariant.variant_initial}}</label>
+          </div>
+          <div class="form-group">
+            <label><b>Category Name</b>    : {{deleteVariant.variant_name}}</label>
+          </div>
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" name="is_active" [ngModel]="deleteVariant.is_active">
+            <label class="form-check-label">Active</label>
+          </div>
+          <div class="modal-footer">
+            <button id="deleteVariantCloseModal" type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            <button type="submit" class="btn btn-primary">Yes</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
