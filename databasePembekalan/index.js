@@ -22,6 +22,8 @@ app.get('/', (req,res) =>{
 
 require('./services/categoryService')(app, global.config.pool)
 require('./services/variantService')(app, global.config.pool)
+require('./services/productService')(app, global.config.pool)
+require('./services/ordersService')(app, global.config.pool)
 
 app.listen(process.env.PORT, () => {
     console.log(`Example app listening on port ${process.env.PORT}`);

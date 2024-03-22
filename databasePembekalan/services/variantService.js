@@ -18,10 +18,38 @@ module.exports = exports = (app, pool) => {
         })
     }) //End of /api/variant
 
+    app.get("/api/variant/:categoryid", (req, res)=>{
+        const idCategory = req.params.categoryid;
+        const query = `select v.id, v.variant_name, v.category_id , c.category_name  
+        from category c 
+        join variant v on c.id = v.category_id
+        where v.category_id = ${idCategory};`
+        pool.query(query, (error, result)=>{
+            if (error){
+                return res.send(400, {
+                    success: false,
+                    error: error,
+                })
+            } else {
+                return res.send(200, {
+                    success: true,
+                    data: result.rows,
+                })
+            }
+        })
+    }) //End of /api/variant
+
     app.post('/api/addvariant', (req, res)=>{
         const {category_id, variant_initial, variant_name, is_active} = req.body;
         const query = `insert into variant(category_id, variant_initial, variant_name, is_active, create_by, create_date)
         values (${category_id}, '${variant_initial}', '${variant_name}', ${is_active}, 'admin1', 'now()');`;
+
+        if (variant_initial === '' || variant_name === '' || category_id === ''){
+            return res.send(400, {
+                success: false,
+                data: error,
+            })
+        }
 
         pool.query(query, (error, result)=>{
             if (error){
@@ -46,6 +74,13 @@ module.exports = exports = (app, pool) => {
         where id = ${id};`
         const idCheck = `select count(*) from variant where id = ${id};`;
         const duplicateCheck = `select count(*) from variant where (variant_name = '${variant_name}' or variant_initial = '${variant_initial}') and id != ${id};`;
+
+        if (variant_initial === '' || variant_name === '' || category_id === ''){
+            return res.send(400, {
+                success: false,
+                data: error,
+            })
+        }
 
         pool.query(idCheck, (error, result)=>{
             const idCount = result.rows[0].count;
