@@ -18,10 +18,10 @@ export class OrdersComponent {
   public listItem: OrderDetails[] = []; //menampung array dari data OrderDetails
   public orderHeader: OrderHeader[] = [];
   public orderDetails: OrderDetails[] = [];
-  public paymoney = 0;
-  public amount = 0;
-  public monchange = 0;
-  public reference: string ='';
+  public paymoney = 0;            public searchString: string = '';
+  public amount = 0;              public perPage: number = 5;
+  public monchange = 0;           public currentPage: number = 1;
+  public reference: string ='';   
 
   constructor(private productService: ProductService, private orderService: OrdersService){}
 
@@ -36,12 +36,44 @@ export class OrdersComponent {
     );
   } //getProductAPI
 
-  public searchProductAPI(param: NgForm): void{      // searchstr: string, perpage: number, page: number): void{
-    console.log(param);
+  public total_pages: number = 1;
+  public fakeArray = new Array(this.total_pages);
+
+  // public searchProductAPI(param: NgForm): void{      // NgForm
+  //   console.log(param);
     
-    this.productService.searchProduct(param).subscribe(
+  //   this.productService.searchProduct(param).subscribe(
+  //     (response: any)=> {
+  //       this.product = response.data
+  //       this.total_pages = response.total_page
+  //       this.fakeArray = new Array(this.total_pages);
+  //     },
+  //     (error: HttpErrorResponse)=> {
+  //       alert(error.message)
+  //     }
+  //   )
+  // }
+  public searchProductAPI(searchstr: string, perpage: number, page: number): void{      // manual param
+    this.productService.searchProduct(searchstr, perpage, page).subscribe(
       (response: any)=> {
         this.product = response.data
+        this.total_pages = response.total_page
+        this.fakeArray = new Array(this.total_pages);
+        this.currentPage = page;
+        if (page === 1){ //penjagaan biar Previous nggak bablas kebawah 1
+          document.getElementById('prevsearchpg').setAttribute('disabled', 'disabled')
+          document.getElementById('prevsearchpg').style.cursor = 'not-allowed';
+        } else {
+          document.getElementById('prevsearchpg').removeAttribute('disabled')
+          document.getElementById('prevsearchpg').style.cursor = 'pointer';
+        }
+        if (page === this.total_pages){ //penjagaan biar Next nggak bablas ngelebihi total halaman
+          document.getElementById('nextsearchpg').setAttribute('disabled', 'disabled')
+          document.getElementById('nextsearchpg').style.cursor = 'not-allowed';
+        } else {
+          document.getElementById('nextsearchpg').removeAttribute('disabled')
+          document.getElementById('nextsearchpg').style.cursor = 'pointer';
+        }
       },
       (error: HttpErrorResponse)=> {
         alert(error.message)
@@ -148,6 +180,7 @@ export class OrdersComponent {
   public onOpenModal(mode: String): void{
     const container = document.getElementById('main-container');
     const button = document.createElement('button');
+    const searchbutton = document.getElementById('searchbutton');
 
     button.type = 'button'
     button.style.display = 'none'
@@ -156,6 +189,7 @@ export class OrdersComponent {
     if (mode === 'neworder'){
       this.getProductAPI();
       button.setAttribute('data-target', '#newOrderModal')
+      searchbutton?.click();
     }
     if (mode === 'payment'){
       button.setAttribute('data-target', '#paymentModal')

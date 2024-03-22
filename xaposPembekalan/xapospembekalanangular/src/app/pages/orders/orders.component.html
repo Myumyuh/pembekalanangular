@@ -49,16 +49,24 @@
       </div>
       <div class="modal-body">
         <fieldset id="fieldneworder">
-          <form #searchForm="ngForm" (ngSubmit)="searchProductAPI(searchForm)">
+          <!-- <form #searchForm="ngForm" (ngSubmit)="searchProductAPI(searchForm)">
             <div class="row mb-3">
               <div class="col-9"><input class="form-control" type="text" ngModel name="searchstr" placeholder="Search..."></div>
               <div class="col-1"><input class="form-control" type="text" ngModel name="perpage"></div>
               <div class="col-1"><input class="form-control" type="text" ngModel name="page"></div>
-              <div class="col-1"><button type="submit" class="btn btn-success"><i
-                    class="nav-icon fas fa-search"></i></button>
+              <div class="col-1"><button type="submit" class="btn btn-success">
+                <i class="nav-icon fas fa-search"></i></button>
               </div>
             </div>
-          </form>
+          </form> -->
+          <div class="row mb-3">
+            <div class="col-9"><input class="form-control" type="text" [(ngModel)]="searchString" placeholder="Search..."></div>
+            <div class="col-1"><input class="form-control" type="text" [(ngModel)]="perPage"></div>
+            <div class="col-1"><input class="form-control" type="text" [(ngModel)]="currentPage"></div>
+            <div class="col-1"><button type="submit" class="btn btn-success">
+              <i class="nav-icon fas fa-search" (click)="searchProductAPI(searchString, perPage, 1)" id="searchbutton"></i></button>
+            </div>
+          </div>
           <table class="table">
             <thead>
               <th>Select</th>
@@ -90,6 +98,18 @@
           </table>
         </fieldset>
       </div>
+      <div class="col-12">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item"><button class="page-link" href="#" (click)="searchProductAPI(searchString, perPage, currentPage-1 )" id="prevsearchpg">Previous</button></li>
+            @for (item of fakeArray; track $index) {
+              <li class="page-item"><a class="page-link" href="#" (click)="searchProductAPI(searchString, perPage, $index+1)">{{$index+1}}</a></li>
+            }
+            <li class="page-item"><button class="page-link" href="#" (click)="searchProductAPI(searchString, perPage, currentPage+1 )" id="nextsearchpg">Next</button></li>
+          </ul>
+        </nav>
+      </div>
+
     </div>
   </div>
 </div>
