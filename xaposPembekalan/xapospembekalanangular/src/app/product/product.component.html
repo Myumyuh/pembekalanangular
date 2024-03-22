@@ -1,0 +1,219 @@
+<div class="container" id="main-container">
+    <h1>Product API</h1>
+
+    <br>
+    <div>
+        <button type="button" class="btn btn-primary" data-toggle="collapse" (click)="onOpenModal(null, 'add')">
+            [+] Tambah Data Product
+        </button>
+    </div>
+
+    <div id="content" class="row">
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th hidden>Variant ID</th>
+                        <th>Category/Variant</th>
+                        <th>Product Initial</th>
+                        <th>Product Name</th>
+                        <th>Product Description</th>
+                        <th>Product Price</th>
+                        <th>Product Stock</th>
+                        <th>Active</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let prdc of product; index as index">
+                        <td>{{index + 1}}</td>
+                        <td hidden>{{prdc.variant_id}}</td>
+                        <td>{{prdc.category_name}}/{{prdc.variant_name}}</td>
+                        <td>{{prdc.product_initial}}</td>
+                        <td>{{prdc.product_name}}</td>
+                        <td>{{prdc.product_desc}}</td>
+                        <td>{{prdc.product_price}}</td>
+                        <td>{{prdc.product_stock}}</td>
+                        <td>{{prdc.is_active}}</td>
+                        <td>
+                            <button (click)="onOpenModal(prdc, 'edit')">Edit</button>
+                            <button (click)="onOpenModal(prdc, 'delete')">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Add Product-->
+<div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #addForm="ngForm" (ngSubmit)="onAddProduct(addForm)">
+                    <div class="form-group">
+                        <label>Category Name</label>
+                        <!-- <input ngModel type="number" class="form-control" name="category_id"> -->
+                        <select (change)="getCustomVariantAPI($event)" ngModel name="category_id" class="form-control">
+                            <option value=""></option>
+                            @for (cat of category; track $index) {
+                            <option value="{{cat.id}}">{{cat.category_name}}</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Variant Name</label>
+                        <!-- <input ngModel type="number" class="form-control" name="category_id"> -->
+                        <select ngModel name="variant_id" class="form-control">
+                            <option value=""></option>
+                            @for (isivar of variant; track $index) {
+                            <option value="{{isivar.id}}">{{isivar.variant_name}}</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Product Initial</label>
+                        <input ngModel type="text" class="form-control" name="product_initial">
+                    </div>
+                    <div class="form-group">
+                        <label>Product Name</label>
+                        <input ngModel type="text" class="form-control" name="product_name">
+                    </div>
+                    <div class="form-group">
+                        <label>Product Description</label>
+                        <input ngModel type="text" class="form-control" name="product_desc">
+                    </div>
+                    <div class="form-group">
+                        <label>Product Price</label>
+                        <input ngModel type="number" class="form-control" name="product_price">
+                    </div>
+                    <div class="form-group">
+                        <label>Product Stock</label>
+                        <input ngModel type="number" class="form-control" name="product_stock">
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" name="is_active" [ngModel]="false">
+                        <label class="form-check-label">Active</label>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="addProductCloseModal" type="button" class="btn btn-secondary"
+                            data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Edit Product-->
+<div class="modal fade" id="editProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #editForm="ngForm" (ngSubmit)="onEditProduct(editForm)">
+                    <input ngModel="{{editProduct.id}}" hidden name="id">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label>Category Name {{editProduct.variant_id}}</label>
+                            <select (change)="getCustomVariantAPI($event)" name="category_id" class="form-control" [(ngModel)]="editProduct.category_id">
+                                <option *ngFor="let cat of category" [value]="cat.id" >{{cat.category_name}}</option>
+                            </select>
+                        </div>
+                        <label>Variant Name {{editProduct.variant_id}}</label>
+                        <select name="variant_id" class="form-control" [(ngModel)]="editProduct.variant_id">
+                            <option *ngFor="let isivar of variant" [value]="isivar.id">{{isivar.variant_name}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Product Initial</label>
+                        <input ngModel="{{editProduct.product_initial}}" type="text" class="form-control"
+                            name="product_initial">
+                    </div>
+                    <div class="form-group">
+                        <label>Product Name</label>
+                        <input ngModel="{{editProduct.product_name}}" type="text" class="form-control"
+                            name="product_name">
+                    </div>
+                    <div class="form-group">
+                        <label>Product Description</label>
+                        <input ngModel="{{editProduct.product_desc}}" type="text" class="form-control" name="product_desc">
+                    </div>
+                    <div class="form-group">
+                        <label>Product Price</label>
+                        <input ngModel="{{editProduct.product_price}}" type="number" class="form-control" name="product_price">
+                    </div>
+                    <div class="form-group">
+                        <label>Product Stock</label>
+                        <input ngModel="{{editProduct.product_stock}}" type="number" class="form-control" name="product_stock">
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" name="is_active"
+                            [ngModel]="editProduct.is_active">
+                        <label class="form-check-label">Active</label>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="editProductCloseModal" type="button" class="btn btn-secondary"
+                            data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal Delete Product-->
+<div class="modal fade" id="deleteProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete Product</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #deleteForm="ngForm" (ngSubmit)="onDeleteProduct(deleteForm)">
+          <input ngModel="{{deleteProduct.id}}" hidden name="id">
+          <div class="form-group">
+            <label><b>Product Initial</b> : {{deleteProduct.product_initial}}</label>
+          </div>
+          <div class="form-group">
+            <label><b>Product Name</b>    : {{deleteProduct.product_name}}</label>
+          </div>
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" name="is_active" [ngModel]="deleteProduct.is_active">
+            <label class="form-check-label">Active</label>
+          </div>
+          <div class="modal-footer">
+            <button id="deleteProductCloseModal" type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            <button type="submit" class="btn btn-primary">Yes</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>

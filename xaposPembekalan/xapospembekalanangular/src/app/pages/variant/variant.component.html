@@ -14,7 +14,7 @@
           <thead>
             <tr>
               <th>No</th>
-              <th>Category ID</th>
+              <th hidden>Category ID</th>
               <th>Variant Initial</th>
               <th>Variant Name</th>
               <th>Active</th>
@@ -24,7 +24,7 @@
           <tbody>
             <tr *ngFor="let isivar of variant; index as index">
               <td>{{index + 1}}</td>
-              <td>{{isivar.category_id}}</td>
+              <td hidden>{{isivar.category_id}}</td>
               <td>{{isivar.variant_initial}}</td>
               <td>{{isivar.variant_name}}</td>
               <td>{{isivar.is_active}}</td>
@@ -53,8 +53,14 @@
       <div class="modal-body">
         <form #addForm="ngForm" (ngSubmit)="onAddVariant(addForm)">
             <div class="form-group">
-                <label>Category ID</label>
-                <input ngModel type="number" class="form-control" name="category_id">
+                <label>Category Name</label>
+                <!-- <input ngModel type="number" class="form-control" name="category_id"> -->
+                <select ngModel name="category_id" class="form-control">
+                  <option value=""></option>
+                  @for (cat of category; track $index) {
+                    <option value="{{cat.id}}">{{cat.category_name}}</option>
+                  }
+                </select>
               </div>  
           <div class="form-group">
             <label>Variant Initial</label>
@@ -95,14 +101,20 @@
           <input ngModel="{{updateVariant.id}}" hidden name="id">
           <div class="form-group">
             <label>Category ID</label>
-            <input ngModel="{{updateVariant.category_id}}" type="text" class="form-control" name="category_id">
+            <!-- <input ngModel="{{updateVariant.category_id}}" type="text" class="form-control" name="category_id"> -->
+            <select name="category_id" class="form-control" [(ngModel)]="updateVariant.category_id">
+              <!-- @for (cat of category; track $index) {
+                <option value="{{cat.id}}">{{cat.category_name}}</option>
+              } -->
+              <option *ngFor="let cat of category" [value]="cat.id">{{cat.category_name}}</option>
+            </select>
           </div>
           <div class="form-group">
-            <label>Category Initial</label>
+            <label>Variant Initial</label>
             <input ngModel="{{updateVariant.variant_initial}}" type="text" class="form-control" name="variant_initial">
           </div>
           <div class="form-group">
-            <label>Category Name</label>
+            <label>Variant Name</label>
             <input ngModel="{{updateVariant.variant_name}}" type="text" class="form-control" name="variant_name">
           </div>
           <div class="form-group form-check">
@@ -135,10 +147,10 @@
         <form #deleteForm="ngForm" (ngSubmit)="onDeleteVariant(deleteForm)">
           <input ngModel="{{deleteVariant.id}}" hidden name="id">
           <div class="form-group">
-            <label><b>Category Initial</b> : {{deleteVariant.variant_initial}}</label>
+            <label><b>Variant Initial</b> : {{deleteVariant.variant_initial}}</label>
           </div>
           <div class="form-group">
-            <label><b>Category Name</b>    : {{deleteVariant.variant_name}}</label>
+            <label><b>Variant Name</b>    : {{deleteVariant.variant_name}}</label>
           </div>
           <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" name="is_active" [ngModel]="deleteVariant.is_active">

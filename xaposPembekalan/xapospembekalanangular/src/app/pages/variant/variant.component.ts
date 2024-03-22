@@ -3,6 +3,8 @@ import { Variant } from '../../models/variant';
 import { VariantService } from '../../services/variant.services';
 import { NgForm } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Category } from '../../models/category';
+import { CategoryService } from '../../services/category.service';
 
 @Component({
   selector: 'app-variant',
@@ -13,13 +15,15 @@ export class VariantComponent implements OnInit{
   public variant: Variant[] = [];
   public updateVariant: Variant;
   public deleteVariant: Variant;
+  public category: Category[] = [];
 
-  constructor(private variantService: VariantService) {
+  constructor(private variantService: VariantService, private categoryService: CategoryService) {
     this.updateVariant = {} as Variant;
     this.deleteVariant = {} as Variant;
   }
   ngOnInit(): void {
     this.getVariantAPI();
+    this.getCategoryAPI();
   }
 
   public getVariantAPI(): void{
@@ -33,11 +37,22 @@ export class VariantComponent implements OnInit{
     )
   }
 
+  public getCategoryAPI(): void{
+    this.categoryService.getCategory().subscribe(
+      (response: any) =>{
+        this.category = response.data
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message)
+      }
+    )
+  }
+
   public onAddVariant(addForm: NgForm): void {
     this.variantService.addVariant(addForm.value).subscribe(
       ()=>{
         this.getVariantAPI();
-        addForm.reset;
+        addForm.reset();
         document.getElementById('addVariantCloseModal')?.click();
       },
       (error: HttpErrorResponse)=> {
@@ -54,14 +69,12 @@ export class VariantComponent implements OnInit{
       (response: any)=>{
         const responseObject = JSON.parse(response)
         this.getVariantAPI();
-        editForm.reset;
         document.getElementById('editVariantCloseModal')?.click();
         alert(responseObject.data)
       },
       (error: HttpErrorResponse)=> {
         const errorObject = JSON.parse(error.error)
         alert(errorObject.data)
-        editForm.reset();
       }
     )
   }
@@ -71,14 +84,12 @@ export class VariantComponent implements OnInit{
       (response: any)=>{
         const responseObject = JSON.parse(response)
         this.getVariantAPI();
-        deleteForm.reset;
         document.getElementById('deleteVariantCloseModal')?.click();
         alert(responseObject.data)
       },
       (error: HttpErrorResponse)=> {
         const errorObject = JSON.parse(error.error)
         alert(errorObject.data)
-        deleteForm.reset();
       }
     )
   }

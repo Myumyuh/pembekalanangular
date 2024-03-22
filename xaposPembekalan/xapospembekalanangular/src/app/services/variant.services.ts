@@ -24,6 +24,19 @@ export class VariantService {
       this.httpOptions
     )
   }
+  
+  public getCustomVariant(): Observable<Variant[]>{
+    return this.http.get<Variant[]>(
+      `${Config.url}/api/search/variant/`,
+      this.httpOptions
+    )
+  }
+  // public getCustomVariant(variant: Variant): Observable<Variant>{
+  //   return this.http.post<Variant>(`${Config.url}/api/customvariant/${variant.category_id}`, variant, {
+  //     ...this.httpOptions,
+  //     responseType: 'text' as 'json'
+  //   })
+  // }
 
   public addVariant(variant: Variant): Observable<Variant>{
     return this.http.post<Variant>(`${Config.url}/api/addvariant`, variant, {
